@@ -1,0 +1,72 @@
+{{> head}}
+{{> top}}
+<main class="main page">
+   {{#page}}
+      <div class="main__left">
+         <div class="main__left-inner">
+            <div class="main__left-content">
+               {{#if @customHTML.beforePage}}
+                  <div class="banner banner--before-content">
+                     {{{@customHTML.beforePage}}}
+                  </div>
+               {{/if}} 
+               <div class="content">
+                  <div>
+                     <h1 class="content__title">
+                        {{title}}
+                     </h1>
+                  </div>
+                  {{#if @config.page.displayFeaturedImage}}
+                     {{#featuredImage}}
+                        {{#if url}}
+                           <figure class="content__featured-image">
+                              <img
+                                 src="{{url}}"
+                                 {{#if @config.site.responsiveImages}}
+                                    {{responsiveImageAttributes 'featuredImage' srcset sizes}}
+                                 {{/if}}
+                                 {{ lazyload "eager" }}
+                                 height="{{height}}"
+                                 width="{{width}}"
+                                 alt="{{alt}}">                             
+                              {{#checkIfAny caption credits}}
+                                 <figcaption>
+                                    {{caption}}
+                                    {{credits}}
+                                 </figcaption>
+                              {{/checkIfAny}}
+                           </figure>
+                        {{/if}}
+                     {{/featuredImage}}
+                  {{/if}}
+                  <div class="content__entry">                   
+                     {{{text}}}                  
+                  </div>
+               </div>
+               {{#if @config.page.displayChildPages}}
+                  {{#if subpages}}
+                     <div class="subpages">
+                        <div class="entry-wrapper">
+                           <h2 class="h5 subpages__title">{{ translate 'page.childPages' }}</h2>
+                           <ul class="subpages__list">
+                              {{> subpages-list}}
+                           </ul>
+                        </div>
+                     </div>
+                  {{/if}}
+               {{/if}}
+            </div>
+            {{#if @config.page.displayToc}}
+               <aside class="main__left-aside">
+                  <div class="main__left-aside__inner">
+                     <h3>{{ translate 'post.tocLabel' }}</h3>
+                     <nav class="aside-toc" id="aside-toc"></nav>
+                  </div>
+               </aside>
+            {{/if}}
+         </div>
+      </div>
+   {{/page}}
+   {{> sidebar}}
+</main>
+{{> footer}}

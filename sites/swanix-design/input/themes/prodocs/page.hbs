@@ -1,0 +1,182 @@
+{{> head}}
+{{> top}}
+<main class="main page">
+   {{#page}}
+      <div class="main__left">
+         <div class="main__left-inner">
+            <div class="main__left-content">
+               {{#if @customHTML.beforePage}}
+                  <div class="banner banner--before-content">
+                     {{{@customHTML.beforePage}}}
+                  </div>
+               {{/if}} 
+               <article class="content">
+                  <header>
+                     <h1 class="content__title">
+                        {{title}}
+                     </h1>
+                  </header>
+                  {{#if @config.page.displayFeaturedImage}}
+                     {{#featuredImage}}
+                        {{#if url}}
+                           <figure class="content__featured-image">
+                              <img
+                                 src="{{url}}"
+                                 {{#if @config.site.responsiveImages}}
+                                    {{responsiveImageAttributes 'featuredImage' srcset sizes}}
+                                 {{/if}}
+                                 {{ lazyload "eager" }}
+                                 height="{{height}}"
+                                 width="{{width}}"
+                                 alt="{{alt}}">                             
+                              {{#checkIfAny caption credits}}
+                                 <figcaption>
+                                    {{caption}}
+                                    {{credits}}
+                                 </figcaption>
+                              {{/checkIfAny}}
+                           </figure>
+                        {{/if}}
+                     {{/featuredImage}}
+                  {{/if}}
+                  <div class="content__entry">                   
+                     {{{text}}}                  
+                  </div>
+                  {{#checkIfAny @config.page.displayDate @config.page.displayAuthor @config.page.displayUpdatedDate @config.page.displayShareButtons @config.page.displayAuthorBio}}
+                     <footer>
+                        {{#checkIfAny @config.page.displayDate @config.page.displayAuthor @config.page.displayUpdatedDate @config.page.displayShareButtons}}
+                           <div class="content__footer-top">
+                              {{#checkIfAny @config.page.displayDate @config.page.displayAuthor @config.page.displayUpdatedDate}}
+                                 <div class="content__meta">
+                                    {{#if @config.page.displayDate}}
+
+                                       <time datetime="{{date createdAt 'YYYY-MM-DDTHH:mm'}}">
+                                          {{#checkIf @config.custom.formatDate '!=' 'custom'}}
+                                             {{date createdAt @config.custom.formatDate}}
+                                          {{else}}
+                                             {{date createdAt @config.custom.formatDateCustom}}
+                                          {{/checkIf}}
+                                       </time>
+
+                                    {{/if}}
+                                    {{#if @config.page.displayAuthor}}
+                                       {{#author}}
+
+                                          {{ translate 'post.publishedBy' }}
+
+                                          <a href="{{url}}" rel="author" title="{{name}}">
+                                             {{name}}
+                                          </a>
+
+                                       {{/author}}
+                                    {{/if}}
+                                    {{#if @config.page.displayUpdatedDate}}
+                                       <span>
+                                          {{ translate 'post.updated' }}
+
+                                          <time datetime="{{date modifiedAt 'YYYY-MM-DDTHH:mm'}}">
+                                             {{#checkIf @config.custom.formatDate '!=' 'custom'}}
+                                                {{date modifiedAt @config.custom.formatDate}}
+                                             {{else}}
+                                                {{date modifiedAt @config.custom.formatDateCustom}}
+                                             {{/checkIf}}
+                                          </time>
+                                       </span>
+                                    {{/if}}
+
+                                 </div>
+                              {{/checkIfAny}}
+
+                              {{#if @config.page.displayShareButtons}}
+                                 {{#checkIfAll @plugins.socialSharing @plugins.socialSharing.state}}
+                                    <div class="content__share">
+                                       <button
+                                          class="content__share-button js-content__share-button"
+                                          aria-label="{{ translate 'partials.shareButtons.shareWith' }}">
+                                          <svg width="32" height="32">
+                                             <use xlink:href="{{@website.assetsUrl}}/svg/svg-map.svg#share"></use>
+                                          </svg>
+                                       </button>
+                                       <div class="content__share-popup js-content__share-popup">
+                                          {{{@customSocialSharing}}}
+                                       </div>
+                                    </div>
+                                 {{else}}
+                                    <div class="content__share">
+                                       <button
+                                          class="content__share-button js-content__share-button"
+                                          aria-label="{{ translate 'partials.shareButtons.shareWith' }}">
+                                          <svg width="32" height="32">
+                                             <use xlink:href="{{@website.assetsUrl}}/svg/svg-map.svg#share"></use>
+                                          </svg>
+                                       </button>
+                                       <div class="content__share-popup js-content__share-popup">
+                                          {{> share-buttons}}
+                                       </div>
+                                    </div>
+                                 {{/checkIfAll}}          
+                              {{/if}}
+                           </div>
+                        {{/checkIfAny}}
+
+                        {{#if @config.page.displayAuthorBio}}
+                           <div class="content__footer-bottom">
+                              <div class="content__bio">
+                                 {{#author}}
+                                    {{#if avatar}}
+                                       <img 
+                                          src="{{avatarImage.url}}" 
+                                          {{ lazyload "lazy" }}
+                                          height="{{avatarImage.height}}"
+                                          width="{{avatarImage.width}}"
+                                          alt="{{avatarImage.alt}}">
+                                    {{/if}}
+                                    
+                                    <div>
+                                       <a href="{{url}}">
+                                          <strong>{{name}}</strong>
+                                       </a>
+                                       {{{description}}}
+                                    </div>
+                                 {{/author}}
+                              </div>
+                           </div>
+                        {{/if}}
+                     </footer>
+                  {{/checkIfAny}}
+               </article>
+
+               {{#if @config.page.displayChildPages}}
+                  {{#if subpages}}
+                     <div class="subpages">
+                        <div class="entry-wrapper">
+                           <h2 class="h5 subpages__title">{{ translate 'page.childPages' }}</h2>
+                           <ul class="subpages__list">
+                              {{> subpages-list}}
+                           </ul>
+                        </div>
+                     </div>
+                  {{/if}}
+               {{/if}}
+               
+               {{#if @config.page.displayComments}}
+                  <div class="content-comments" id="content-comments">                    
+                     {{{@commentsCustomCode}}}
+                  </div>
+               {{/if}}
+
+            </div>
+            {{#if @config.page.displayToc}}
+               <aside class="main__left-aside">
+                  <div class="main__left-aside__inner">
+                     <h3>{{ translate 'post.tocLabel' }}</h3>
+                     <nav class="aside-toc" id="aside-toc"></nav>
+                  </div>
+               </aside>
+            {{/if}}
+         </div>
+      </div>
+   {{/page}}
+   {{> sidebar}}
+</main>
+{{> footer}}
