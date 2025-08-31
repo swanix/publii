@@ -1,0 +1,13 @@
+{
+    "version": "https://jsonfeed.org/version/1",
+    "title": "Swanix Design",
+    "description": "",
+    "home_page_url": "https://swanix.org/docs",
+    "feed_url": "https://swanix.org/docs/feed.json",
+    "user_comment": "",
+    "author": {
+        "name": "Sebastian Serna"
+    },
+    "items": [
+    ]
+}
